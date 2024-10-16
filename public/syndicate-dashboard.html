@@ -232,6 +232,7 @@
                 <th class="text-left py-2 px-4">Actions</th>
                 <th class="text-left py-2 px-4">Details</th>
                 <th class="text-left py-2 px-4">MoM</th>
+                <th class="text-left py-2 px-4">Action Plan</th>
                 <th class="text-left py-2 px-4">Prority</th>
                 <th class="text-left py-2 px-4">Update</th>
 
@@ -243,6 +244,22 @@
     </table>
 </div>
 
+<!-- Action Plan Pop-up -->
+<div id="action-plan-popup" class="fixed inset-0 bg-gray-600 bg-opacity-50 hidden items-center justify-center">
+    <div class="bg-white p-6 rounded-lg shadow-xl">
+        <h3 class="text-xl mb-4">Add Action Plan</h3>
+        <textarea id="action-plan-comment" class="w-full p-2 mb-4 border rounded" placeholder="Comment"></textarea>
+        <textarea id="action-plan-text" class="w-full p-2 mb-4 border rounded" placeholder="Action Plan"></textarea>
+        <div class="flex justify-end">
+            <button id="save-action-plan" class="bg-blue-500 text-white px-4 py-2 rounded mr-2">Save</button>
+            <button id="close-action-plan-popup" class="bg-gray-300 px-4 py-2 rounded">Close</button>
+        </div>
+        <div id="previous-plans" class="mt-4">
+            <h4 class="text-lg mb-2">Previous Action Plans</h4>
+            <!-- Previous plans will be inserted here -->
+        </div>
+    </div>
+</div>
 
 
 
@@ -376,6 +393,74 @@
         });
 
         
+
+function openActionPlanPopup(clientId) {
+    const popup = document.getElementById('action-plan-popup');
+    popup.classList.remove('hidden');
+    popup.classList.add('flex');
+    popup.dataset.clientId = clientId;
+
+    // Load and display previous action plans
+    loadPreviousActionPlans(clientId);
+}
+function loadPreviousActionPlans(clientId) {
+    // Fetch action plans for the given client from the backend (or use dummy data for now)
+    const previousPlansContainer = document.getElementById('previous-plans');
+    if (!previousPlansContainer) {
+        console.error('Previous plans container not found');
+        return;
+    }
+
+    // Dummy data for demonstration
+    const dummyPlans = [
+        { date: '2023-09-30 14:30', comment: 'Initial contact', plan: 'Schedule follow-up call' },
+        { date: '2023-10-05 10:00', comment: 'Follow-up call', plan: 'Prepare proposal' }
+    ];
+
+    // Clear previous plans
+    previousPlansContainer.innerHTML = '<h4 class="text-lg mb-2">Previous Action Plans</h4>';
+
+    // Append each plan to the container
+    dummyPlans.forEach(plan => {
+        const planElement = `
+            <div class="mb-2 p-2 bg-gray-100 rounded">
+                <p><strong>Date:</strong> ${plan.date}</p>
+                <p><strong>Comment:</strong> ${plan.comment}</p>
+                <p><strong>Plan:</strong> ${plan.plan}</p>
+            </div>
+        `;
+        previousPlansContainer.insertAdjacentHTML('beforeend', planElement);
+    });
+}
+
+function openActionPlanPopup(clientId) {
+    const popup = document.getElementById('action-plan-popup');
+    
+    if (!popup) {
+        console.error('Action plan popup not found');
+        return;
+    }
+
+    popup.classList.remove('hidden');
+    popup.classList.add('flex');
+    popup.dataset.clientId = clientId;
+
+    // Load and display previous action plans
+    loadPreviousActionPlans(clientId);
+}
+
+document.getElementById('close-action-plan-popup').addEventListener('click', function() {
+    const popup = document.getElementById('action-plan-popup');
+    
+    if (!popup) {
+        console.error('Action plan popup not found');
+        return;
+    }
+
+    popup.classList.add('hidden');
+    popup.classList.remove('flex');
+});
+
 
     </script>
    

@@ -1389,3 +1389,52 @@ app.listen(secondport, () => {
   console.log(`Server running on port ${secondport}`);
 });
 
+
+
+// Syndicate Action Plan 
+
+// Add new action plan
+
+const actionPlanSchema = new mongoose.Schema({
+  clientId: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'SyndicateClient',
+    required: true
+  },
+  comment: String,
+  plan: String,
+  createdAt: {
+    type: Date,
+    default: Date.now
+  }
+});
+
+
+app.post('/api/action-plans', authenticateToken, async (req, res) => {
+  const actionPlan = new ActionPlan({
+    clientId: req.body.clientId,
+    comment: req.body.comment,
+    plan: req.body.plan
+  });
+
+  try {
+    const newActionPlan = await actionPlan.save();
+    res.status(201).json(newActionPlan);
+  } catch (err) {
+    res.status(400).json({ message: err.message });
+  }
+});
+
+// Get action plans for a specific client
+app.get('/api/action-plans/:clientId', authenticateToken, async (req, res) => {
+  try {
+    const actionPlans = await ActionPlan.find({ clientId: req.params.clientId }).sort({ createdAt: -1 });
+    res.json(actionPlans);
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+});
+
+
+// Use the router
+app.use(router);

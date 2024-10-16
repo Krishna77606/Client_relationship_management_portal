@@ -23,11 +23,27 @@
                 <input type="text" id="name" placeholder="Name" required />
                 <input type="tel" id="phone" placeholder="Phone Number" required />
                 <input type="email" id="email" placeholder="Email" />
+                
                 <select id="syndicate_name" required>
                     <option value="" disabled selected>Select Strategy Partner Name</option>
                 </select>
                 
                 <input type="text" id="companyName" placeholder="Company Name" />
+                
+                <!-- Domain Name Dropdown -->
+                <select id="domain_name" required>
+                    <option value="" disabled selected>Select Domain Name</option>
+                    <option value="fintech">FinTech</option>
+                    <option value="edtech">EdTech</option>
+                    <option value="healthtech">HealthTech</option>
+                    <option value="foodtech">FoodTech</option>
+                    <option value="biotech">BioTech</option>
+                    <option value="proptech">PropTech</option>
+                    <option value="cleantech">CleanTech</option>
+                    <option value="autotech">AutoTech</option>
+                    <option value="agtech">AgTech</option>
+                    <option value="insurtech">InsurTech</option>
+                </select>
 
                 <!-- Button for capturing face image -->
                 <button type="button" id="captureFace">Capture Face Image</button>
@@ -42,8 +58,6 @@
                     <div id="faceImageDisplay"></div>
                 </div>
                  
-
-
                 <button type="submit">Let's Connect</button>
             </form>
             <div class="thank-you-container" id="thankYouContainer" style="display:none;">

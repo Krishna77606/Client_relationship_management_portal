@@ -66,6 +66,80 @@ async function fetchSyndicateClients(token) {
   }
 }
 
+//   ----------------------->
+  // Function to open the actionplan Popup 
+    
+  function openActionPlanPopup(clientId) {
+    const popup = document.getElementById('action-plan-popup');
+    popup.classList.remove('hidden');
+    popup.classList.add('flex');
+    popup.dataset.clientId = clientId;
+
+    // Load and display previous action plans
+    loadPreviousActionPlans(clientId);
+}
+
+function loadPreviousActionPlans(clientId) {
+    // This function should fetch previous action plans from your backend
+    // For now, we'll use dummy data
+    const dummyPlans = [
+        { date: '2023-09-30 14:30', comment: 'Initial contact', plan: 'Schedule follow-up call' },
+        { date: '2023-10-05 10:00', comment: 'Follow-up call', plan: 'Prepare proposal' }
+    ];
+
+    const previousPlansContainer = document.getElementById('previous-plans');
+    previousPlansContainer.innerHTML = '<h4 class="text-lg mb-2">Previous Action Plans</h4>';
+
+    dummyPlans.forEach(plan => {
+        const planElement = `
+            <div class="mb-2 p-2 bg-gray-100 rounded">
+                <p><strong>Date:</strong> ${plan.date}</p>
+                <p><strong>Comment:</strong> ${plan.comment}</p>
+                <p><strong>Plan:</strong> ${plan.plan}</p>
+            </div>
+        `;
+        previousPlansContainer.insertAdjacentHTML('beforeend', planElement);
+    });
+}
+
+document.getElementById('save-action-plan').addEventListener('click', function() {
+    const clientId = document.getElementById('action-plan-popup').dataset.clientId;
+    const comment = document.getElementById('action-plan-comment').value;
+    const plan = document.getElementById('action-plan-text').value;
+
+    // Here you would typically send this data to your backend
+    console.log('Saving action plan for client:', clientId, 'Comment:', comment, 'Plan:', plan);
+
+    // For demo purposes, we'll just add it to the list of previous plans
+    const newPlan = {
+        date: new Date().toLocaleString(),
+        comment: comment,
+        plan: plan
+    };
+
+    const previousPlansContainer = document.getElementById('previous-plans');
+    const planElement = `
+        <div class="mb-2 p-2 bg-gray-100 rounded">
+            <p><strong>Date:</strong> ${newPlan.date}</p>
+            <p><strong>Comment:</strong> ${newPlan.comment}</p>
+            <p><strong>Plan:</strong> ${newPlan.plan}</p>
+        </div>
+    `;
+    previousPlansContainer.insertAdjacentHTML('afterbegin', planElement);
+
+    // Clear the input fields
+    document.getElementById('action-plan-comment').value = '';
+    document.getElementById('action-plan-text').value = '';
+});
+
+document.getElementById('close-action-plan-popup').addEventListener('click', function() {
+    document.getElementById('ac tion-plan-popup').classList.add('hidden');
+    document.getElementById('action-plan-popup').classList.remove('flex');
+});
+
+// -------------------->
+
+
 function populateTable(clients) {
     const tableBody = document.getElementById('client-table-body');
     tableBody.innerHTML = ''; // Clear existing table rows
@@ -80,9 +154,7 @@ function populateTable(clients) {
                   <img id="profile-img" src="${profileImage}" alt="Profile" class="profile-img cursor-pointer" style="width: 50px; height: 50px; border-radius: 50%;" onclick="openImagePopup('${profileImage}')">
               </td>
               <td class="py-2 px-4">${client.name || 'N/A'}</td>
-              <td class="py-2 px-4">${client.email || 'N/A'}</td>
-              <td class="py-2 px-4">${client.phone || 'N/A'}</td>
-              <td class="py-2 px-4">${client.syndicate_name || 'N/A'}</td>
+
               <td class="py-2 px-4">${new Date(client.createdAt).toLocaleString()}</td>
               <td class="py-2 px-4">
                   <button class="bg-blue-500 px-2 py-1 rounded" onclick="handleViewClient('${client._id}')">View</button>
@@ -92,6 +164,9 @@ function populateTable(clients) {
               </td>
               <td class="py-2 px-4">
                   <button href="./mom.html" onclick="handleAddDetailsClick1(event, '${client._id}')" class="bg-green-500 px-2 py-1 rounded">Log</button>
+              </td>
+              <td class="py-2 px-4">
+                  <button onclick="openActionPlanPopup('${client._id}')" class="bg-purple-500 px-2 py-1 rounded">Plan</button>
               </td>
               <!-- Priority Flag Column -->
               <td class="py-2 px-4">
@@ -109,7 +184,9 @@ function populateTable(clients) {
         tableBody.insertAdjacentHTML('beforeend', row);
     });
   }
+
   
+
   // Function to open the image popup with the clicked image
 function openImagePopup(imageUrl) {
     const imagePopup = document.getElementById('imagePopup');
